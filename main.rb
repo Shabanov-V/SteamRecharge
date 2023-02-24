@@ -3,6 +3,6 @@ require './Notification.rb'
 
 topProfit = requestTopProfit()
 
-if (topProfit >= 5.0)
+if (topProfit >= 50.0)
     sendNotification(topProfit)
 end
