@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SteamRechargeApp
+
+  Monitor best steam items offers
+
+Globals:
+  Function:
+    Timeout: 60
+    MemorySize: 128
+
+Resources:
+  SteamRechargeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CheckProfit/
+      Handler: main.handler
+      Runtime: ruby2.7
+      Architectures:
+      - x86_64
+      Events:
+        Schedule:
+          Type: ScheduleV2
+          Properties:
+            Name: CheckPriceSchedule
+            ScheduleExpression: rate(10 minute)
+
+  ApplicationResourceGroup:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name:
+        Fn::Join:
+        - ''
+        - - ApplicationInsights-SAM-
+          - Ref: AWS::StackName
+      ResourceQuery:
+        Type: CLOUDFORMATION_STACK_1_0
+
+#TODO: CloudWatch graph
