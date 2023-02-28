@@ -24,7 +24,9 @@ Resources:
           Type: ScheduleV2
           Properties:
             Name: CheckPriceSchedule
-            ScheduleExpression: rate(10 minute)
+            ScheduleExpression: rate(1 minute)
+      Policies:
+        - CloudWatchPutMetricPolicy: {}
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
@@ -36,5 +38,3 @@ Resources:
           - Ref: AWS::StackName
       ResourceQuery:
         Type: CLOUDFORMATION_STACK_1_0
-
-#TODO: CloudWatch graph

@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 gem "httparty"
 gem "http"
+gem "aws-sdk-cloudwatch"
 gem "telegram-bot-ruby", '~> 1.0'
 
 ruby '~> 2.7.0'
