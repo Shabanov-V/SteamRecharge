@@ -3,9 +3,10 @@ require './Notification.rb'
 require 'aws-sdk-cloudwatch'
 
 def handler(event:, context:)
-    topProfit = requestTopProfit()
+    topProfitResponse = requestTopProfit()
+    topProfit = topProfitResponse[:profitPercent]
     if (topProfit >= 50.0)
-        sendNotification(topProfit)
+        sendNotification(topProfitResponse)
     end
     reportMetric(topProfit)
     {
@@ -25,8 +26,8 @@ def reportMetric(metric)
       metric_name: "Profit_by_percentages",
       dimensions: [
         {
-          name: "Percent", # required
-          value: "Time", # required
+          name: "Percent",
+          value: "Time",
         },
       ],
       timestamp: Time.now,

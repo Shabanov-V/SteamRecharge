@@ -15,6 +15,8 @@ PARAMS = {
     weekSellsMin: "5"
 }
 
+BUY_URL_TEMPLATE = "https://t.sih-db.com/15GGBe?subid1=/buy?query=%{itemName}&subid2=%{marketplace}"
+
 def requestTopProfit() 
     response = HTTP.post(URL, json: PARAMS).parse
 
@@ -22,6 +24,15 @@ def requestTopProfit()
         return nil
     end
     topItem = response["items"][0]
+    topItemMarket = topItem["markets"][0]
     topProfit  = topItem["profitPercent"]
-    return topProfit
+    result = {
+        profitPercent: topProfit, 
+        buyLink: BUY_URL_TEMPLATE % {
+            itemName: CGI.escape(topItem["item"]),
+            marketplace: CGI.escape(topItemMarket["market"])
+        },
+        price: topItemMarket["price"]
+    }
+    return result
 end
