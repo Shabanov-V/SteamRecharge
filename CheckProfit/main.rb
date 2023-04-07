@@ -3,10 +3,11 @@ require './Notification.rb'
 require 'aws-sdk-cloudwatch'
 
 def handler(event:, context:)
-    topProfitResponse = requestTopProfit()
+    config = YAML.load_file('config.yaml')
+    topProfitResponse = requestTopProfit(10).find {|el| !config["ignoredItems"].include?(el[:item])}
     topProfit = topProfitResponse[:profitPercent]
-    if (topProfit >= 50.0)
-        sendNotification(topProfitResponse)
+    if (topProfit >= 51.0)
+        sendNotification(topProfitResponse, config["tg_token"], config["chat_id"])
     end
     reportMetric(topProfit)
     {

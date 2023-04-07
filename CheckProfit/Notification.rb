@@ -1,17 +1,13 @@
 require 'telegram/bot'
 require 'yaml'
 
-config = YAML.load_file('config.yaml')
-TOKEN = config["tg_token"]
-CHAT_ID = config["chat_id"]
-
-def sendNotification(topProfitResponse)
+def sendNotification(topProfitResponse, tg_token, chat_id)
     message = "#{escapeNumber(topProfitResponse[:profitPercent])}% saving offer " + 
       "is available\\. [Buy now](#{topProfitResponse[:buyLink]}) " + 
       "for $#{escapeNumber(topProfitResponse[:price])}"
-    Telegram::Bot::Client.run(TOKEN) do |bot|
+    Telegram::Bot::Client.run(tg_token) do |bot|
         bot.api.send_message(
-          chat_id: Integer(CHAT_ID),
+          chat_id: Integer(chat_id),
           text: message,
           parse_mode: "MarkdownV2",
           disable_web_page_preview: true
